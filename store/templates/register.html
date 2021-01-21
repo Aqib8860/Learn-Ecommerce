@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/bootstrap/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/main.css' %}">
+    <script rel="stylesheet" type="text/css" src="{% static 'accounts/js/bootstrap.min.js' %}"></script>
+    <script rel="stylesheet" type="text/css" src="{% static 'accounts/js/bootstrap.js' %}"></script>
+    <title>Register</title>
+</head>
+<body>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-success">
+    </form>
+</body>
+</html>

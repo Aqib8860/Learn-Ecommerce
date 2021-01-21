@@ -1,0 +1,57 @@
+{% load static %}
+<style>
+    #hello-msg{
+        font-size: 18px;
+        color: slategray;
+        margin-right: 20px;
+    }
+</style>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <a style="font-size:25px;" class="navbar-brand" href="{% url 'store:store' %}">MY STORE</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarNav" aria-controls="navbarNav" aria-atomic="false"
+            aria-label="Toogle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url  'store:store' %}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'store:store' %}">Products</a>
+            </li>
+
+            <li class="nav-item">
+            {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a href="{% url 'store:my_orders' %}" class="nav-link">My Orders</a>
+                </li>
+                <div class="form-inline my-2 my-lg-0 right">
+                    <a href="" class="nav-link">Hello {{ request.user }}</a>
+                    <a href="{% url 'store:logout' %}" class="btn btn-warning" style="color:white">Logout</a>
+                    <a class="" href="{% url  'store:cart' %}">
+                        <img id="cart-icon" src="{% static 'images/shopping_cart_.png' %}">
+                    </a>
+                </div>
+
+
+            {% else %}
+                <div class="form-inline my-2 my-lg-0 right">
+                    <a href="{% url 'store:login' %}" class="btn btn-warning" style="color:white">Login</a>
+                    <a href="{% url 'store:register' %}" class="btn btn-success" style="color:white">Register</a>
+                    <a class="" href="{% url  'store:cart' %}">
+                        <img id="cart-icon" src="{% static 'images/shopping_cart_.png' %}">
+                    </a>
+                </div>
+
+            {% endif %}
+        </li>
+        </ul>
+    </div>
+
+</nav>

@@ -1,0 +1,51 @@
+{% extends 'apistore/main.html' %}
+{% block title %} Home {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row" id="product-list">
+
+    </div>
+</div>
+
+<script>
+
+    products()
+
+    function products(){
+        var wrapper = document.getElementById('product-list')
+        var url = 'http://127.0.0.1:8000/apistoreproduct-list'
+
+        fetch(url)
+        .then((resp) => resp.json())
+        .then(function(data){
+            console.log('Data:', data)
+
+            var list = data
+            for (var i in list){
+                var item = `
+                <div class="col-lg-4">
+
+                    <div class="card" style="width: 22rem;">
+                        <img class="card-img-top" src="${list[i].image}">
+                        <hr>
+                        <div class="card-body">
+                            <h5 class="card-title">${list[i].name}</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="" class="btn btn-outline-secondary add-btn">Add to Cart</a>
+                            <a href="" class="btn btn-outline-success">View</a>
+                            <h4 style="display: inline-block;float:right">Rs ${list[i].price}</h4>
+                        </div>
+                    </div>
+                </div>
+
+                `
+            wrapper.innerHTML += item
+            }
+        }
+        )
+    }
+</script>
+
+{% endblock %}
