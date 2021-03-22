@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views import generic
 from .forms import UserLoginForm
+import requests
+
 # from django.views.generic.edit import FormView
 
 # Create your views here.
@@ -40,6 +42,16 @@ def login_page(request):
 def user_logout(request):
     logout(request)
     return redirect('e-commerce:user-login')
+
+
+def my_orders2(headers, request):
+    url = 'http://127.0.0.1:8000/apistoreorder-list'
+    response = requests.post(url, headers=headers)
+    user_orders = response.json()
+    context = {
+        'user_orders': user_orders
+    }
+    return render(request, 'apistore/myorders.html', context)
 
 
 def my_orders(request):

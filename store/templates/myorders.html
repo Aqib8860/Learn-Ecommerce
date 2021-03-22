@@ -3,6 +3,7 @@
 
 {% block content %}
 {% include 'status.html' %}
+
 <div class="row">
         <div class="col">
             <div class="card card-body">
@@ -17,18 +18,76 @@
                     </tr>
                     {% for item in items %}
                     <tr>
-                        <td>{{ item.product.name }}</td>
+                        <td> {{ item.product.name }} </td>
                         <td> {{ item.product.category }} </td>
-                        <td> order.date_created </td>
-                        <td>{{ item.order.transaction_id }}</td>
-                        <td>{{ item.order.status }}</td>
+                        <td> {{ item.order.dateordered|date:"D, d M, Y, H:i, A" }} </td>
+                        <td> {{ item.order.transaction_id }} </td>
+                        <td>
+                            {% if item.order.status == 'Pending' %}
+                                <div class="alert alert-danger">
+                                    {{ item.order.status }}
+                                </div>
+                            {% elif item.order.status == 'Out for delivery' %}
+                                <div class="alert alert-warning">
+                                    {{ item.order.status }}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-success">
+                                    {{ item.order.status }}
+                                </div>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </table>
             </div>
         </div>
     </div>
+<div><canvas id="newChart" width="200" height="100"></canvas></div>
+<script>
+var ctx = document.getElementById('newChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
 
+    // The data for our dataset
+    data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            data: {{ data|safe }},
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            label: 'Orders'
+        }],
 
+    },
 
+    // Configuration options go here
+    options: {
+        responsive: true
+    }
+});
+</script>
+<div><canvas id="myChart" width="200" height="100"></canvas></div>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'My First dataset',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45]
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
+</script>
 {% endblock %}

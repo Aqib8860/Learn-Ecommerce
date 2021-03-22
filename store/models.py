@@ -47,7 +47,7 @@ class Order(models.Model):
         ('Out for delivery', 'Out for delivery'),
     )
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
-    date_ordered = models.DateTimeField(auto_now_add=True)
+    dateordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False, null=True, blank=False)
     transaction_id = models.CharField(max_length=200, null=True)
     status = models.CharField(max_length=200, null=True, choices=STATUS)

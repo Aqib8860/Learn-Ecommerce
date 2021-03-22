@@ -29,7 +29,7 @@ def login_page(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('api_store:home')
+            return redirect('store:store')
         else:
             messages.info(request, 'Username or Password Incorrect')
     context = {'form': form}
@@ -58,6 +58,8 @@ def checkout(request):
 
 
 def my_orders(request):
+    labels = []
+    data = []
     customer = request.user.customer
     orders = Order.objects.filter(customer=customer)
     orders_delivered = orders.filter(status='Delivered').count()
@@ -65,7 +67,14 @@ def my_orders(request):
 
     order = Order.objects.filter(customer=customer)
     items = OrderItem.objects.filter(order__id__in=order.all())
+
+    my_order = Order.objects.filter(datetime__dateordered__month='01')
+    count_order = my_order.count()
+
+    data.append(count_order)
     context = {
+        'labels': labels,
+        'data': data,
         'orders': orders,
         'orders_delivered': orders_delivered,
         'orders_pending': orders_pending,

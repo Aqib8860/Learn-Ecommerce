@@ -3,33 +3,67 @@
 
 {% block content %}
 {% include 'apistore/status.html' %}
-<div class="row">
-    <div class="col">
-        <div class="card card-body">
-            <table class="table table-sm">
-                <tr>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Date Ordered</th>
-                    <th>Transaction Id</th>
-                    <th>Status</th>
+<div class="container">
 
-                </tr>
-                {% for item in items %}
-                <tr>
-                    <td>{{ item.product.name }}</td>
-                    <td> {{ item.product.category }} </td>
-                    <td> order.date_created </td>
-                    <td>{{ item.order.transaction_id }}</td>
-                    <td>{{ item.order.status }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+    <div class="row">
+        <div class="col">
+            <div class="card card-body">
+
+                <table class="table table-sm" id="order-list">
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Date Ordered</th>
+                        <th>Transaction Id</th>
+                        <th>Status</th>
+                    </tr>
+
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
+    orders()
+    function orders(){
+        var wrapper = document.getElementById('order-list')
+
+        var url = 'http://127.0.0.1:8000/apistoreorder-list'
+
+        fetch(url)
+        .then((resp) => resp.json())
+
+        .then(function(data){
+            console.log('Data:', data)
+            var list = data
+
+            for (var i in list){
+                var item = `
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td> {{ item.product.category }} </td>
+                        <td> ${list[i].date_ordered} </td>
+                        <td>${list[i].transaction_id}</td>
+                        <td>${list[i].status}</td>
+                        <template v-if = "${list[i].status} == 'Pending'">
+                            <td class='alert alert-danger'>
+                                ${list[i].status}
+                            </td>
+                        </template>
+                        <template v-else>
+                            <td>
+                                ${list[i].status}
+                            </td>
+                        </template>
+                    </tr>
+                `
+
+        wrapper.innerHTML += item
+            }
+        }
+        )
+    }
 
 </script>
 

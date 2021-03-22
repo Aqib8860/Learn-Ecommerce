@@ -16,6 +16,8 @@ def api_root(request, format=None):
         'users': reverse('user-list', request=request, format=format),
         'products': reverse('product-list', request=request, format=format),
         'orders': reverse('order-list', request=request, format=format),
+        'orderitems': reverse('orderitem-list', request=request, format=format),
+        'allorders': reverse('allorder-list', request=request, format=format),
     })
 
 
@@ -46,14 +48,27 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
                           IsOwnerOrReadOnly]
 
 
+class AllOrderList(generics.ListCreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = AllOrdersSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class AllOrderDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Order.objects.all()
+    serializer_class = AllOrdersSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
 class OrderList(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         user = request.user
         orders = Order.objects.filter(customer=user)
+        # items = OrderItem.objects.filter(order__id__in=orders.all())
         serializer_context = {
             'request': request,
         }
@@ -67,5 +82,17 @@ class OrderList(generics.ListCreateAPIView):
 
 class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_class = OrderDetailSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class OrderItemList(generics.ListCreateAPIView):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
+    permission_classes = [permissions.IsAuthenticated]

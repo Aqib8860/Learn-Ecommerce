@@ -33,9 +33,35 @@
                     <h5 class="card-title">Orders Pending</h5>
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title">{{ orders_pending }}</h3>
+                    <h3 class="card-title" id="order-count">{{ orders_pending }}</h3>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    orders_count()
+    function orders_count(){
+        var wrapper = document.getElementById('order-count')
+
+        var url = 'http://127.0.0.1:8000/apistoreorder-list'
+
+        fetch(url)
+        .then((resp) => resp.json())
+
+        .then(function(data){
+            console.count('Data:', data)
+            var list = data
+            var list = `
+                <h1>${data}</h1>
+
+                `
+        wrapper.innerHTML += item
+            }
+        }
+        )
+    }
+
+</script>
